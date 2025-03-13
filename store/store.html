@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>Store Brokers</title>
+    <link rel="stylesheet" href="./store.css">
+  </head>
+  <body>
+    <h1>St🪙re Br🪙kers</h1>
+
+    <p style="color: red;">By using this service, you accept that neither <a href="https://github.com/paperblock01" target="_blank">paperblock01</a> nor <a href="https://www.trebuchetent.com/" target="_blank">Trebuchet Entertainment LLC</a> is responsible for the failure to recieve items bought, resulting in the loss of coins.</p>
+
+    <!--
+    I stole the style from w3schools because I am lazy.
+    -->
+
+    <div class="tab">
+      <button class="tablinks" onclick="openTab(event, 'Flags')">Flags</button>
+      <button class="tablinks" onclick="openTab(event, 'Emblems')">Emblems</button>
+      <button class="tablinks" onclick="openTab(event, 'Crates')">Crates</button>
+      <button class="tablinks" onclick="openTab(event, 'Shop')">Shop Bundles</button>
+
+      <div class="coins">🪙 <a id="coins"></a></div>
+
+    </div>
+
+    <div id="Flags" class="tabcontent"></div>
+
+    <div id="Emblems" class="tabcontent"></div>
+
+    <div id="Crates" class="tabcontent"></div>
+
+    <div id="Shop" class="tabcontent">Coming Siib...</div>
+
+    <div id="cratexnnn" class="crate-container">
+      <div class="crate-view">
+        <div class="crate-details">
+          <a id="crate-namexnnn" class="crate-name"></a>
+          <button onclick="exit('cratexnnn')">Close</button>
+        </div>
+        <div>
+          <textarea id="crateitemsxnnn" class="crateitems"></textarea>
+        </div>
+        <button onclick="copy_data('crateitemsxnnn')">Copy</button>
+        <div>
+          To view the items, paste them <a href="https://zorkaa.github.io/wb/items/" target="_blank">here</a>
+        </div>
+      </div>
+    </div>
+
+  </body>
+  <script src="../api_version.js"></script>
+  <script src="./store.js"></script>
+</html>

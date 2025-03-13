@@ -1,0 +1,124 @@
+* {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+.coins {
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    margin-right: 20px;
+    font-size: 25px;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    width: 170px;
+    border:1px solid black;
+    margin: 4px;
+
+}
+.item-id {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    width: 100%;
+    border:1px solid black;
+}
+.image {
+    background-color: black;
+}
+.interact {
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+    padding: 3px;
+}
+.buy {
+    color: red;
+}
+.realbuy {
+    color: red;
+}
+.owned {
+    font-weight: normal;
+    display:flex;
+    justify-content: space-between;
+    padding: 2px;
+}
+
+.crate-container {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0,0,0,0.4);
+}
+.crate-view {
+    padding: 10px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    vertical-align: middle;
+    border:1px solid black;
+}
+.crateitems {
+    width: 100%;
+    height: 200px;
+}
+.crate-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.crate-name {
+    font-weight: bold;
+}
