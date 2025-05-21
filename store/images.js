@@ -28,9 +28,16 @@ async function get_links(wiki_link) {
     for (let i=2; i<table.length; i++) {
         // Split the table entry by the <td> tag
         let data = table[i].split("<td>");
-
+      
         // Extract and push the link of the cosmetic
-        links.push(data[1].split(/"([^"]*)"/)[3]);
+        let revision = data[1].split(/"([^"]*)"/)[3];
+
+        // Remove revision part of the link
+        let link = "";
+        (revision != undefined) ? link = revision.split("/revision")[0] : link = "";
+
+        // Push modified links to links array
+        links.push(link);
 
         // Extract and push the id: xxx
         ids.push(data[2].split("\n")[0]);
