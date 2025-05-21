@@ -233,6 +233,32 @@ function crate_cards(item_id, price, link) {
     </div>`;
 }
 
+function bundle_cards(item_id, price, link) {
+    return `
+    <div id="card`+item_id+`" class="bundle">
+        <div id="`+item_id+`" class="bundle-id">`+item_id+`</div>
+        <div id="`+item_id+`certain" class="bundle-certain"><a>Unknown</a></div>
+        <div id="`+item_id+`name" class="bundle-name">Bundle Name</div>
+
+        <div class="bundle-table">
+            <table style="width:100%" id="`+item_id+`table">
+            <tr>
+                <td>Unknown</td>
+                <td>
+                <img class="bundle-image" src="">
+                </td>
+            </tr>
+            </table>
+        </div>
+
+        <div id="interact`+item_id+`" class="interact">
+            <a class="price"> 🪙`+price+`</a>
+            <button id="buy`+item_id+`" class="buy" onclick="confirm('`+item_id+`','`+price+`')">Buy</button>
+        </div>
+    </div>
+    `;
+}
+
 function array_sort_unique(array) {
     let sorted = [];
     let names = [];
@@ -289,7 +315,21 @@ function display_crates(crates) {
     }
 }
 
-function owned_items(items) {
+function display_bundles(bundles) {
+    let Bundles = document.getElementById("Bundles");
+    // Loop through the data for the bundles
+    for (let i=0; i<bundles.length; i+=2) {
+        let bundle_card = document.createElement("div");
+        bundle_card.innerHTML = bundle_cards(bundles[i],bundles[i+1],bundle_link)
+
+        Bundles.appendChild(bundle_card);
+    }
+}
+
+// Disable cards if items sold in the card are owned
+function owned_items(items, bundles) {
+    // Get the keys of the bundles object
+    let keys = Object.keys(bundles);
 
     // Update the amount of coins the player has:
     document.getElementById("coins").textContent = items[0];
@@ -298,7 +338,10 @@ function owned_items(items) {
     let owned = [];
     // Seperate array to store the crates
     let owned_crate = [];
+    // Array to store bundle ids that are owned
+    let owned_bundle = [];
 
+    // Check for owned items
     for (let i=2; i<items.length; i++) {
         // Flags
         if (items[i][0] == "f") {
@@ -308,10 +351,28 @@ function owned_items(items) {
         else if (items[i][0] == "d") {
             owned.push(items[i]);
         }
+        // Crates
         else if (items[i][0] == "x") {
             owned_crate.push(items[i]);
         }
+    }
 
+    // Check for items owned in bundles
+    // Loop through each bundle
+    for (let i=0; i<keys.length; i++) {
+        // Add the id of the current bundle to the owned_bundle array
+        owned_bundle.push(keys[i]);
+
+        // Check the items in the bundle for matches in the player's items
+        for (let j=0; j<bundles[keys[i]]["items"].length; j++) {
+            // Check if the owned items array does not include the item in the current bundle
+            if (!items.includes(bundles[keys[i]]["items"][j])) {
+                // Remove the id of the bundle for the owned_bundle array
+                owned_bundle.splice(owned_bundle.indexOf(keys[i],1));
+                // Stop checking items and go to the next bundle
+                break;
+            }
+        }
     }
 
     // Change the details of the cards of owned items
@@ -319,7 +380,7 @@ function owned_items(items) {
         // Gray the card
         document.getElementById("card"+owned[j]).style.backgroundColor = "gray";
 
-        // Change the item text
+        // Change the item id text
         document.getElementById(owned[j]).innerHTML = owned[j]+" (Owned)";
 
         // Disable the buy button
@@ -327,12 +388,26 @@ function owned_items(items) {
         document.getElementById("buy"+owned[j]).style.color = "gray";
     }
 
+    // Create an array of every unique crate owned by the player
     let sorted = array_sort_unique(owned_crate);
 
     // Change the details of crate cards
     for (let k=0; k<sorted[0].length; k++) {
         document.getElementById("owned"+sorted[0][k]).innerHTML = "Own: "+sorted[1][k];
         document.getElementById("owned"+sorted[0][k]).style.backgroundColor = "tomato";
+    }
+
+    // Change the details of the bundle cards
+    for (let l=0; l<owned_bundle.length; l++) {
+        // Gray the card
+        document.getElementById("card"+owned_bundle[l]).style.backgroundColor = "gray";
+
+        // Change the item id text
+        document.getElementById(owned_bundle[l]).innerHTML = owned_bundle[l]+" (Owned)";
+
+        // Disable the buy button
+        document.getElementById("buy"+owned_bundle[l]).disabled = true;
+        document.getElementById("buy"+owned_bundle[l]).style.color = "gray";
     }
 
 }
@@ -359,14 +434,16 @@ async function buy_real(itemid,price) {
         // Buy the item for real
         let buy = await buy_item(token,itemid);
 
-        console.log(itemid+ " for " +price+ " coins with token " + token)
+        console.log(itemid+" for |"+price+"| coins with token: "+ token)
 
         // Reset the interact div of the card
         cancel(itemid,price)
 
+        // Retreve the player's items
         const items = await get_items(token);
 
-        owned_items(items);
+        // Check the shop for changes in owned items
+        owned_items(items, Bundles);
 
     }
     catch (error) {
@@ -393,9 +470,10 @@ const token = getCookie("game_token");
     display_flags(flags);
     display_emblems(emblems);
     display_crates(crates);
+    display_bundles(special);
 
     // Check for owned items and edit the cards
-    owned_items(items);
+    owned_items(items, Bundles);
 
 })();
 
